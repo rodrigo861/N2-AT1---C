@@ -13,9 +13,9 @@ Este projeto possui três programas principais para trabalhar com dados simulado
 Use o gcc para compilar cada programa:
 
 ```bash
-gcc program3_gerar.c -o gerar
-gcc program1_ordenar.c -o ordenar
-gcc program2_consultar.c -o consultar
+gcc program1_gerar.c -o gerar
+gcc program2_ordenar.c -o ordenar
+gcc program3_consultar.c -o consultar
 ```
 
 ---
@@ -40,7 +40,13 @@ Gera um arquivo `dados_teste.txt` com leituras aleatórias para cada sensor.
 ✅ Exemplo:
 
 ```bash
-./gerar 1718500000 1718600000 temperatura:CONJ_Q umidade:CONJ_Z status:BINARIO aviso:TEXTO
+./gerar 18/06/2024 15:00:00 18/06/2025 15:00:00 temperatura:CONJ_Q umidade:CONJ_Z status:BINARIO aviso:TEXTO
+
+./gerar 18/06/2024 15:00:00 18/06/2025 15:00:00 temperatura: umidade: status: aviso: //CERTO
+
+./gerar 18/06/2024 15:00:00 18/06/2025 15:00:00 CONJ_Q CONJ_Z BINARIO TEXTO //CERTO
+
+./gerar temperatura:CONJ_Q umidade:CONJ_Z status:BINARIO aviso:TEXTO //CERTO
 ```
 
 Isso criará 2000 leituras para cada sensor entre os timestamps informados.
@@ -49,7 +55,7 @@ Isso criará 2000 leituras para cada sensor entre os timestamps informados.
 
 ## 📑 2. Ordenar e separar sensores
 
-Lê o arquivo `dados_teste.txt`, ordena por timestamp decrescente e:
+Lê o arquivo `sensores.txt`, ordena por timestamp decrescente e:
 
 - Salva tudo em `ordenado.txt`
 - Cria um arquivo separado para cada sensor (ex: temperatura.txt, umidade.txt)
@@ -57,7 +63,9 @@ Lê o arquivo `dados_teste.txt`, ordena por timestamp decrescente e:
 🧾 Uso:
 
 ```bash
-./ordenar dados_teste.txt
+./ordenar sensores.txt
+
+./ordenar arq_invalido.txt
 ```
 
 ---
@@ -75,7 +83,10 @@ Consulta a leitura mais próxima de uma data e hora para um sensor específico.
 ✅ Exemplo:
 
 ```bash
-./consultar temperatura 2025-06-16 14:00:00
+./consultar temperatura 18/06/2024 15:00:00
+./consultar status 18/06/2024 15:00:00
+./consultar umidade 18/06/2024 15:00:00
+./consultar aviso 18/06/2024 15:00:00
 ```
 
 Isso procura em temperatura.txt a leitura mais próxima de 16 de junho de 2025, às 14:00:00.
@@ -91,3 +102,4 @@ Isso procura em temperatura.txt a leitura mais próxima de 16 de junho de 2025, 
 ---
 
 🛠️ Feito com 💻 em linguagem C
+

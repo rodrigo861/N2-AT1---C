@@ -3,7 +3,6 @@
 #include <string.h>
 #include <time.h>
 #include <limits.h>
-#include <locale.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -40,7 +39,7 @@ int busca_binaria_decrescente(Leitura* leituras, int tamanho, long alvo) {
     return melhor_indice;
 }
 
-int validar_data(int ano, int mes, int dia, int hora, int minuto, int segundo) {
+int validar_data(int dia, int mes, int ano, int hora, int minuto, int segundo) {
     if (ano < 1970 || mes < 1 || mes > 12 || dia < 1 || dia > 31 ||
         hora < 0 || hora > 23 || minuto < 0 || minuto > 59 || segundo < 0 || segundo > 59) {
         return 0;
@@ -55,16 +54,17 @@ int validar_data(int ano, int mes, int dia, int hora, int minuto, int segundo) {
     return 1;
 }
 
-long converter_para_timestamp(const char* data, const char* hora) {
-    int ano, mes, dia, h, m, s;
-    if (sscanf(data, "%d-%d-%d", &ano, &mes, &dia) != 3 ||
+long conversor_timestamp(const char* data, const char* hora) {
+    int dia, mes, ano, h, m, s;
+
+    if (sscanf(data, "%d/%d/%d", &dia, &mes, &ano) != 3 ||
         sscanf(hora, "%d:%d:%d", &h, &m, &s) != 3) {
-        fprintf(stderr, "Formato inválido. Use: AAAA-MM-DD HH:MM:SS\n");
+        fprintf(stderr, "Data invalida. Use: DD/MM/AAAA HH:MM:SS\n");
         return -1;
     }
 
-    if (!validar_data(ano, mes, dia, h, m, s)) {
-        fprintf(stderr, "Data ou hora inválida.\n");
+    if (!validar_data(dia, mes, ano, h, m, s)) {
+        fprintf(stderr, "Data ou hora invalida.\n");
         return -1;
     }
 
@@ -81,15 +81,12 @@ long converter_para_timestamp(const char* data, const char* hora) {
 }
 
 int main(int argc, char* argv[]) {
-    // Suporte UTF-8 e português no Windows
-    setlocale(LC_ALL, "Portuguese");
-
 #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
 #endif
 
     if (argc != 4) {
-        printf("Uso: %s <sensor> <AAAA-MM-DD> <HH:MM:SS>\n", argv[0]);
+        printf("Uso: %s <sensor> <DD/MM/AAAA> <HH:MM:SS>\n", argv[0]);
         return 1;
     }
 
@@ -97,11 +94,11 @@ int main(int argc, char* argv[]) {
     const char* data = argv[2];
     const char* hora = argv[3];
 
-    long timestamp_alvo = converter_para_timestamp(data, hora);
+    long timestamp_alvo = conversor_timestamp(data, hora);
     if (timestamp_alvo == -1) return 1;
 
     char nome_arquivo[100];
-    sprintf(nome_arquivo, "%s.txt", sensor);
+    snprintf(nome_arquivo, sizeof(nome_arquivo), "%s.txt", sensor);
 
     FILE* arq = fopen(nome_arquivo, "r");
     if (!arq) {
@@ -125,14 +122,14 @@ int main(int argc, char* argv[]) {
     fclose(arq);
 
     if (total == 0) {
-        printf("Arquivo %s está vazio.\n", nome_arquivo);
+        printf("Arquivo %s esta vazio.\n", nome_arquivo);
         free(leituras);
         return 1;
     }
 
     int indice = busca_binaria_decrescente(leituras, total, timestamp_alvo);
     if (indice >= 0) {
-        printf("Leitura mais próxima:\n");
+        printf("Leitura mais proxima:\n");
         printf("Timestamp: %ld\n", leituras[indice].timestamp);
         printf("Sensor: %s\n", leituras[indice].id_sensor);
         printf("Valor: %s\n", leituras[indice].valor);

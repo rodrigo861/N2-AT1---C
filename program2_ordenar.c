@@ -45,9 +45,9 @@ int main(int argc, char* argv[]) {
 
     qsort(leituras, total, sizeof(Leitura), comparar_desc);
 
-    FILE* saida = fopen("ordenado.txt", "w");
+    FILE* saida = fopen("decrescente.txt", "w");
     if (!saida) {
-        printf("Erro ao criar arquivo ordenado.txt.\n");
+        printf("Erro ao criar arquivo decrescente.txt.\n");
         free(leituras);
         return 1;
     }
@@ -57,12 +57,11 @@ int main(int argc, char* argv[]) {
     }
     fclose(saida);
 
-    // Criar arquivos separados por sensor
     for (int i = 0; i < total; i++) {
         char nome_arquivo[100];
         sprintf(nome_arquivo, "%s.txt", leituras[i].id_sensor);
 
-        FILE* sensor_arq = fopen(nome_arquivo, "a");  // Modo append
+        FILE* sensor_arq = fopen(nome_arquivo, "a"); 
         if (sensor_arq) {
             fprintf(sensor_arq, "%ld %s %s\n", leituras[i].timestamp, leituras[i].id_sensor, leituras[i].valor);
             fclose(sensor_arq);
@@ -72,6 +71,6 @@ int main(int argc, char* argv[]) {
     }
 
     free(leituras);
-    printf("Ordenação concluída. Arquivos gerados com sucesso.\n");
+    printf("Arquivos decrescente com sucesso.\n");
     return 0;
 }
