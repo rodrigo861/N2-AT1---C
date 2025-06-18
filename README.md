@@ -1,16 +1,15 @@
-# Projeto de Sensores em C
 
-Este projeto possui três programas principais para trabalhar com dados simulados de sensores:
+# Projeto de Geração, Ordenação e Consulta de Leituras de Sensores
 
-- 📄 program3_gerar.c — Gera dados simulados.
-- 📄 program1_ordenar.c — Ordena os dados por timestamp e separa por sensor.
-- 📄 program2_consultar.c — Consulta uma leitura específica por sensor e data/hora.
+Este projeto consiste em três programas escritos em C:
+
+1. `gerar.c` - Gera dados de sensores.
+2. `ordenar.c` - Ordena os dados por timestamp de forma decrescente.
+3. `consultar.c` - Consulta o dado mais próximo a uma data e hora informada.
 
 ---
 
-## 🔧 Compilação
-
-Use o gcc para compilar cada programa:
+## 🧰 Compilação
 
 ```bash
 gcc program1_gerar.c -o gerar
@@ -20,86 +19,94 @@ gcc program3_consultar.c -o consultar
 
 ---
 
-## 📊 1. Gerar dados simulados
+## ⚙️ Uso dos Programas
 
-Gera um arquivo `dados_teste.txt` com leituras aleatórias para cada sensor.
+### 1. Gerar dados (`gerar`)
 
-🧾 Uso:
+Gera leituras de sensores com base em um intervalo de tempo.
+
+📌 Sintaxe:
 
 ```bash
-./gerar <timestamp_inicio> <timestamp_fim> <sensor1>:<TIPO> <sensor2>:<TIPO> ...
+./gerar <data_inicio> <hora_inicio> <data_fim> <hora_fim> <sensor1>:<tipo> <sensor2>:<tipo> ...
 ```
 
-🧪 Tipos de sensores válidos:
+🗓️ Formato da data: `DD/MM/AAAA`  
+🕐 Formato da hora: `HH:MM:SS`
 
-- CONJ_Z → Inteiro
-- CONJ_Q → Número decimal
-- TEXTO  → Palavra (ex: "Alfa", "Beta", etc.)
-- BINARIO → true ou false
+🔢 Tipos de sensores disponíveis:
+
+- `CONJ_Z` – Números inteiros
+- `CONJ_Q` – Números decimais
+- `TEXTO`  – Palavras aleatórias (ex: Norte, Sul, etc.)
+- `BINARIO` – true ou false
 
 ✅ Exemplo:
 
 ```bash
-./gerar 18/06/2024 15:00:00 18/06/2025 15:00:00 temperatura:CONJ_Q umidade:CONJ_Z status:BINARIO aviso:TEXTO
-
-./gerar 18/06/2024 15:00:00 18/06/2025 15:00:00 temperatura: umidade: status: aviso: //CERTO
-
-./gerar 18/06/2024 15:00:00 18/06/2025 15:00:00 CONJ_Q CONJ_Z BINARIO TEXTO //CERTO
-
-./gerar temperatura:CONJ_Q umidade:CONJ_Z status:BINARIO aviso:TEXTO //CERTO
+./gerar 14/06/2025 15:00:00 15/06/2025 18:30:00 temperatura:CONJ_Q umidade:CONJ_Z aviso:TEXTO status:BINARIO
 ```
 
-Isso criará 2000 leituras para cada sensor entre os timestamps informados.
+📦 Saída: `sensores.txt`
 
 ---
 
-## 📑 2. Ordenar e separar sensores
+### 2. Ordenar dados (`ordenar`)
 
-Lê o arquivo `sensores.txt`, ordena por timestamp decrescente e:
+Ordena as leituras por timestamp em ordem decrescente e cria um arquivo separado por sensor.
 
-- Salva tudo em `ordenado.txt`
-- Cria um arquivo separado para cada sensor (ex: temperatura.txt, umidade.txt)
-
-🧾 Uso:
+📌 Sintaxe:
 
 ```bash
 ./ordenar sensores.txt
-
-./ordenar arq_invalido.txt
 ```
+
+📁 Saídas:
+
+- `decrescente.txt` — com todas as leituras ordenadas
+- `temperatura.txt`, `umidade.txt`, etc. — um arquivo por sensor
 
 ---
 
-## 🔍 3. Consultar por sensor e data/hora
+### 3. Consultar leitura (`consultar`)
 
-Consulta a leitura mais próxima de uma data e hora para um sensor específico.
+Busca a leitura mais próxima da data e hora informadas para um sensor específico.
 
-🧾 Uso:
+📌 Sintaxe:
 
 ```bash
-./consultar <sensor> <AAAA-MM-DD> <HH:MM:SS>
+./consultar <sensor> <data> <hora>
 ```
+
+🗓️ Formato da data: `DD/MM/AAAA`  
+🕐 Formato da hora: `HH:MM:SS`
 
 ✅ Exemplo:
 
 ```bash
-./consultar temperatura 18/06/2024 15:00:00
-./consultar status 18/06/2024 15:00:00
-./consultar umidade 18/06/2024 15:00:00
-./consultar aviso 18/06/2024 15:00:00
+./consultar temperatura 14/06/2025 16:45:00
 ```
 
-Isso procura em temperatura.txt a leitura mais próxima de 16 de junho de 2025, às 14:00:00.
+---
+
+## 📝 Observações
+
+- Os programas verificam erros de entrada como datas inválidas (ex: 31/02/2024 ou 25:61:99).
+- O terminal deve suportar UTF-8 para exibir corretamente acentos e caracteres especiais.
+- Cada sensor gerado com `TEXTO` recebe aleatoriamente um dos valores: `Norte`, `Sul`, `Leste`, `Oeste`, `Centro`.
 
 ---
 
-## 📌 Observações
+## 🧪 Execução completa sugerida
 
-- Os arquivos separados dos sensores são sobrescritos a cada execução de ordenação.
-- O timestamp é baseado no formato Unix (segundos desde 01/01/1970).
-- Certifique-se de rodar os comandos na ordem: gerar → ordenar → consultar.
+```bash
+./gerar 14/06/2025 15:00:00 15/06/2025 18:30:00 temperatura:CONJ_Q umidade:CONJ_Z aviso:TEXTO status:BINARIO
+./ordenar sensores.txt
+./consultar temperatura 14/06/2025 16:45:00
+```
 
 ---
 
-🛠️ Feito com 💻 em linguagem C
+## 👤 Autor
 
+Rodrigo — Projeto de sensores em linguagem C.
