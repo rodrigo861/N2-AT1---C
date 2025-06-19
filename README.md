@@ -91,8 +91,8 @@ Busca a leitura mais próxima da data e hora informadas para um sensor específi
 
 ## 📝 Observações
 
+- Os sensores podem ser gerados com nome digitado antes do tipo escolhido
 - Os programas verificam erros de entrada como datas inválidas (ex: 31/02/2024 ou 25:61:99).
-- O terminal deve suportar UTF-8 para exibir corretamente acentos e caracteres especiais.
 - Cada sensor gerado com `TEXTO` recebe aleatoriamente um dos valores: `Norte`, `Sul`, `Leste`, `Oeste`, `Centro`.
 
 ---
